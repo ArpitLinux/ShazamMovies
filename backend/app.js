@@ -20,22 +20,22 @@ app.use(bodyParser.urlencoded({limit: "50mb", extended: true}))
 
 app.post("/base64file", async (req, res, next) => {
     console.log(req.headers['content-length'])
-    // SHAZAMOPTIONS.data = req.body.base64;
+    SHAZAMOPTIONS.data = req.body.base64;
 
-    // await axios.request(SHAZAMOPTIONS).then(async function (response) {
-    //     var fullResponse = response.data
-    //     console.log(fullResponse)
-    //     var songName = response.data.track.share.subject
-    //     const GOOGLEOPTIONS = {
-    //         method: "GET",
-    //         url: `https://customsearch.googleapis.com/customsearch/v1?q=${songName}&key=${GOOGLEAPIKEY}&cx=${GOOGLEAPICX}`,
-    //     }
-    //     await axios.request(GOOGLEOPTIONS).then(function(anotherResponse) {
-    //         var obj = {"Song": songName, "Data": anotherResponse}
-    //     })
-    // }).catch(function (error) {
-    //         console.error(error);
-    //     });
+    await axios.request(SHAZAMOPTIONS).then(async function (response) {
+        var fullResponse = response.data
+        console.log(fullResponse)
+        var songName = response.data.track.share.subject
+        const GOOGLEOPTIONS = {
+            method: "GET",
+            url: `https://customsearch.googleapis.com/customsearch/v1?q=${songName}&key=${GOOGLEAPIKEY}&cx=${GOOGLEAPICX}`,
+        }
+        await axios.request(GOOGLEOPTIONS).then(function(anotherResponse) {
+            var obj = {"Song": songName, "Data": anotherResponse}
+        })
+    }).catch(function (error) {
+            console.error(error);
+        });
     
 })
 
