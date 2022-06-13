@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <section>
+      <header>
+        <h1 id="audio-result">Please upload audio file</h1>
+        <label for="file">Please select an audio file to search with</label>
+        <br />
+        <input type="file" name="file" id="file" />
+        <br>
+        <button id="audio-button">Record</button>
+        <h5 id="audio-status">Current status: Not recording</h5>
+        <br>
+        <br>
+        <button id="play-audio">Click here to play audio if recorded</button>
+      </header>
+    </section>
+    <section id="r"></section>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      
+      var options = {
+        method: "POST",
+        url: "https://shazam.p.rapidapi.com/songs/v2/detect",
+        params: { timezone: "America/Chicago", locale: "en-US" },
+        headers: {
+          "content-type": "text/plain",
+          "X-RapidAPI-Host": "shazam.p.rapidapi.com",
+          'X-RapidAPI-Key': '0551ba44ccmsh4360411d0bed797p1ffee2jsne7655170602c'
+        },
+        data: null,
+      };
+      var file = document.getElementById("file");
+      var button = document.getElementById("audio-button")
+      var status = document.getElementById("audio-status")
+      var fileReader = new FileReader();
+      var newFileReader = new FileReader();
+      var takenBlob;
+
+      var currentStatus = "NotRecording"
+
+      function filetoBase64(specifiedVar) {
+      var sr = 44100; // sample rate
+      var sl = 4; // 4 seconds
+      file.value = null;
+      specifiedVar.onload = (event) => {
+        var audioContext = new AudioContext({ sampleRate: sr });
+        var audioBuffer = audioContext.decodeAudioData(
+          event.target.result,
+          (buffer) => {
+            var sbf32 = new ArrayBuffer(buffer.length * 4);
+            var sbi16 = new ArrayBuffer(sr * 2 * sl);
+            var sbfloat32 = new Float32Array(sbf32);
+            var sbint16 = new Int16Array(sbi16);
+            var sbuint8 = new Uint8Array(sbi16);
+            var base64 = "";
+            buffer.copyFromChannel(sbfloat32, 0);
+
+            for (var i = 0; i < sr * sl; i++) {
+              var value = Math.floor(sbfloat32[i] * 32767);
+              sbint16[i] = value;
+            }
+            base64 = btoa(
+              sbuint8.reduce((data, byte) => data + String.fromCharCode(byte))
+            );
+            options.data = base64;
+
+        axios.post("http://localhost:3000/base64file", {"base64": base64})
+
+         //   axios
+         //   .request(options)
+         //   .then(function (response) {
+         //     var fullResponse = response.data
+         //     var songName = response.data.track.share.subject
+         //     var audioHeader = document.getElementById("audio-result").innerHTML = "Song: " + songName
+         //     cse(songName)
+         //     console.log(fullResponse);
+         //     console.log(songName);
+        //    })
+        //    .catch(function (error) {
+        //      console.error(error);
+        //    });
+
+
+          }
+        );
+
+  
+
+      };
+    }
+
+    function cse(q) {
+      console.log("cse:" + q)
+      var r = document.getElementById('r');
+      r.innerHTML = "";
+
+      fetch(`https://customsearch.googleapis.com/customsearch/v1?q=${q}&key=AIzaSyCsRpjJQCVzK5fUT6MJMZPKlLTqZJ6PIB8&cx=ffd56f262e76c9bd1`, {
+        method: "GET",
+      })
+      .then(response => response.json()) 
+      .then(json => {
+        json.items.forEach(i=> {
+          var fragment = "";
+          r.innerHTML += `
+              <a href="${i.link}" style="float:left; width:150px; text-align: center;">
+                <b>${i.pagemap.metatags[0].title}</b>
+                <img src="${i.pagemap.cse_image[0].src}" width="100px">
+                <p>${i.htmlSnippet}</p>
+                <br/>
+              </a>
+              `
+        })
+      })
+      .catch(err => console.log(err));
+    }
+
+    function sendBlobtoBase64(blob) {
+      newFileReader.readAsArrayBuffer(blob)
+      filetoBase64(newFileReader)
+    }
+
+   function TakeBlob() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      let mediaRecorder = new MediaRecorder(stream);
+      currentStatus = "Recording"
+      document.getElementById("audio-status").innerHTML = "Recording"
+      mediaRecorder.start();
+  
+      let audioChunks = [];
+      mediaRecorder.addEventListener("dataavailable", event => {
+        audioChunks.push(event.data);
+      });
+  
+      mediaRecorder.addEventListener("stop", () => {
+        let audioBlob = new Blob(audioChunks);
+        let audioUrl = URL.createObjectURL(audioBlob);
+        globalThis.audio = new Audio(audioUrl);
+        document.getElementById("audio-status").innerHTML = "Not Recording"
+        currentStatus = "NotRecording"
+
+        sendBlobtoBase64(audioBlob)
+      });
+  
+      setTimeout(() => {
+        mediaRecorder.stop();
+      }, 3000);
+    });
+   }
+
+  
+
+      file.onchange = () => {
+        if (file && file.files[0]) {
+          fileReader.readAsArrayBuffer(file.files[0]);
+          filetoBase64(fileReader)
+        }
+      };
+
+      button.addEventListener("click", () => {
+        if (currentStatus == "NotRecording") {
+          TakeBlob()
+        }
+      })
+
+      document.getElementById("play-audio").addEventListener("click", () => {
+        audio.play();
+      })
+
+    </script>
+  </body>
+</html>
