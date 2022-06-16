@@ -1,18 +1,42 @@
 <!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/f20978ae1e.js" crossorigin="anonymous"></script>
+  <script src="/test.js"></script>
+  <title>WAZAM</title>
+</head>
 <html lang="en">
-  <body>
+  <body id="body">
     <section>
       <header>
-        <h1 id="audio-result">Please upload audio file</h1>
-        <label for="file">Please select an audio file to search with</label>
-        <br />
-        <input type="file" name="file" id="file" />
-        <br>
-        <button id="audio-button">Record</button>
-        <h5 id="audio-status">Current status: Not recording</h5>
-        <br>
-        <br>
-        <button id="play-audio">Click here to play audio if recorded</button>
+        <h1 id="logo">WAZAM
+          <a href="/LP.html"></a>
+        </h1>
+        <div id="container">
+          <button id="audio-button" onclick="recording()"> 
+            <i id="fa-microphone" class="fa-solid fa-microphone">
+            </i> Record
+          </button>
+          <h5 id="audio-status">Status: Not recording</h5>
+          <div id="container2">
+            <button id="play-audio">
+              <i class="fa-solid fa-play">
+              </i> Play Audio
+            </button>
+            <label for="file">
+              <div id="audio-result">
+                <i class="fa-solid fa-arrow-up-from-bracket">
+                </i> Upload
+              </div>
+              <input type="file" name="file" id="file" />
+            </label>
+          </div>
+        </div>
+        <!--I moved some tags around, also removed some text. idk if it will be problematic-->
       </header>
     </section>
     <section id="r"></section>
@@ -167,7 +191,13 @@
       document.getElementById("play-audio").addEventListener("click", () => {
         audio.play();
       })
-
+      function recording() {
+        let audioButton = document.getElementById("audio-button")
+        let faMic = document.getElementById("fa-microphone")
+        audioButton.style.animationPlayState = "running"
+        faMic.style.animationPlayState = "running"
+      } /*triggers onclick and runs css animation for recording
+         I can't figure out how to make it run only after allowing mic*/
     </script>
   </body>
 </html>
