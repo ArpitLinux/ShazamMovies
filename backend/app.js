@@ -22,13 +22,13 @@ app.post("/base64file", async (req, res, next) => {
 
     await axios.request(SHAZAMOPTIONS).then(async function (response) {
         var fullResponse = response.data
-        console.log(fullResponse)
         var songName = response.data.track.share.subject
         const GOOGLEOPTIONS = {
             method: "GET",
             url: `https://customsearch.googleapis.com/customsearch/v1?q=${songName}&key=${GOOGLEAPIKEY}&cx=${GOOGLEAPICX}`,
         }
         await axios.request(GOOGLEOPTIONS).then(function(anotherResponse) {
+            console.log(anotherResponse)
             var obj = {"Song": songName, "Data": anotherResponse.data}
             res.json(obj)
         })
