@@ -5,7 +5,6 @@ import axios from "axios"
 function RecordingButton(DisableButtons, setDisableButtons, setAudioURL, filetoBase64) {
 
   function startRecording() {
-    setDisableButtons(true)
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
       let mediaRecorder = new MediaRecorder(stream);
@@ -83,6 +82,55 @@ function UploadFile(DisableButtons, setDisableButtons, setFile, filetoBase64) {
   }
 }
 
+function PlayAudioButton(DisableButtons, AudioURL) {
+
+  function handleClick() {
+    AudioURL.play()
+  }
+
+  if (DisableButtons) {
+    return (
+      <button disabled id="play-audio">Click here to play audio if recorded</button>
+    )
+  } else {
+    return (
+      <button onClick={handleClick} id="play-audio">Click here to play audio if recorded</button>
+    )
+  }
+}
+
+
+function SongTitle(SongName) {
+  if (SongName) {
+    return (
+      <h1 id="audio-result">{"Found song: " + SongName}</h1>
+    )
+  } else {
+    return (
+      <h1 id="audio-result">Please upload audio file</h1>
+    )
+  }
+}
+
+function ResponseData(Data) {
+  if (Data) {
+    return (
+      <div>
+        {Data.map((item) => {
+          return (
+            <a href={item.link}>
+            <b>{item.pagemap.metatags[0].title}</b>
+            <img src={item.pagemap.cse_image[0].src} width="100px" />
+            <p>{item.htmlSnippet}</p>
+            <br/>
+          </a>
+          )
+        })}
+      </div>
+    )
+  }
+}
+
 
 function App() {
 
@@ -90,7 +138,7 @@ function App() {
   const [AudioURL, setAudioURL] = useState(false)
   const [File, setFile] = useState("")
 
-  const [SongName, setSongName] = useState("")
+  const [SongName, setSongName] = useState(false)
   const [Data, setData] = useState([])
   const [Err, setErr] = useState("")
 
@@ -154,7 +202,7 @@ function App() {
     <div>
       <section>
       <header>
-        <h1 id="audio-result">Please upload audio file</h1>
+        <SongTitle SongName={SongName} />
         <label for="file">Please select an audio file to search with</label>
         <br />
         <UploadFile DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setFile={setFile} filetoBase64={filetoBase64} />
@@ -165,10 +213,10 @@ function App() {
 
         <br />
         <br />
-        <button id="play-audio">Click here to play audio if recorded</button>
+        <PlayAudioButton AudioURL={AudioURL} DisableButtons={DisableButtons}  />
       </header>
     </section>
-    <section id="r"></section>
+    <section id="r"><ResponseData Data={Data} /></section>
     </div>
   );
 }
