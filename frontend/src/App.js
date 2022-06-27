@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from "axios"
 
 
-function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, filetoBase64, setRecording}) {
+function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, filetoBase64, setRecording, setSongName, setErr}) {
 
   function startRecording() {
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -10,6 +10,8 @@ function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, fileto
       let mediaRecorder = new MediaRecorder(stream);
       setDisableButtons(true)
       setRecording(true)
+      setSongName("")
+      setErr("")
       mediaRecorder.start();
   
       let audioChunks = [];
@@ -64,12 +66,14 @@ function RecordingStatus({Recording}) {
     }
 }
 
-function UploadFile({DisableButtons, setDisableButtons, setFile, filetoBase64, setAudioURL}) {
+function UploadFile({DisableButtons, setDisableButtons, setFile, filetoBase64, setAudioURL, setSongName, setErr}) {
 
   function selectFile(event) {
     setDisableButtons(true)
     let chosenFile = event.target.files[0]
     setFile(chosenFile)
+    setSongName("")
+    setErr("")
 
     var fileReader = new FileReader();
     fileReader.readAsArrayBuffer(chosenFile);
@@ -211,10 +215,10 @@ function App() {
         <SongTitle SongName={SongName} />
         <label htmlFor="file">Please select an audio file to search with</label>
         <br />
-        <UploadFile setAudioURL={setAudioURL} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setFile={setFile} filetoBase64={filetoBase64} />
+        <UploadFile setErr={setErr} setSongName={setSongName} setAudioURL={setAudioURL} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setFile={setFile} filetoBase64={filetoBase64} />
         <br />
 
-        <RecordingButton setRecording={setRecording} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setAudioURL={setAudioURL} filetoBase64={filetoBase64}  />
+        <RecordingButton setErr={setErr} setSongName={setSongName} setRecording={setRecording} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setAudioURL={setAudioURL} filetoBase64={filetoBase64}  />
         <RecordingStatus Recording={Recording} />
 
         <br />
