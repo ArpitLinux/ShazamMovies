@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from "axios"
 
 
-function RecordingButton(DisableButtons, setDisableButtons, setAudioURL, filetoBase64) {
+function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, filetoBase64}) {
 
   function startRecording() {
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -48,7 +48,7 @@ function RecordingButton(DisableButtons, setDisableButtons, setAudioURL, filetoB
   }
 }
 
-function RecordingStatus(Recording) {
+function RecordingStatus({Recording}) {
 
     if (Recording) {
       return (
@@ -61,7 +61,7 @@ function RecordingStatus(Recording) {
     }
 }
 
-function UploadFile(DisableButtons, setDisableButtons, setFile, filetoBase64) {
+function UploadFile({DisableButtons, setDisableButtons, setFile, filetoBase64}) {
   setDisableButtons(true)
 
   function selectFile(event) {
@@ -82,7 +82,7 @@ function UploadFile(DisableButtons, setDisableButtons, setFile, filetoBase64) {
   }
 }
 
-function PlayAudioButton(DisableButtons, AudioURL) {
+function PlayAudioButton({DisableButtons, AudioURL}) {
 
   function handleClick() {
     AudioURL.play()
@@ -100,7 +100,7 @@ function PlayAudioButton(DisableButtons, AudioURL) {
 }
 
 
-function SongTitle(SongName) {
+function SongTitle({SongName}) {
   if (SongName) {
     return (
       <h1 id="audio-result">{"Found song: " + SongName}</h1>
@@ -112,7 +112,7 @@ function SongTitle(SongName) {
   }
 }
 
-function ResponseData(Data) {
+function ResponseData({Data}) {
   if (Data) {
     return (
       <div>
