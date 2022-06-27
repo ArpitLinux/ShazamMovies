@@ -6,6 +6,8 @@ import bodyParser from "body-parser"
 import cors from "cors"
 import axios from "axios"
 
+// TODO: ADD ERROR USECASES
+
 import {SHAZAMOPTIONS, GOOGLEAPIKEY, GOOGLEAPICX} from "./keys.js"
 
 const app = express();
