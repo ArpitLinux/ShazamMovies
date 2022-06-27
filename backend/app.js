@@ -18,6 +18,8 @@ app.use(cors({
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true}))
 
+app.use(express.static('public'))
+
 app.post("/base64file", async (req, res, next) => {
     console.log(req.headers['content-length'])
     // SHAZAMOPTIONS.data = req.body.base64;
