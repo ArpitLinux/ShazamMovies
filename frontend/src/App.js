@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import axios from "axios"
 
 
-function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, filetoBase64}) {
+function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, filetoBase64, setRecording}) {
 
   function startRecording() {
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
       let mediaRecorder = new MediaRecorder(stream);
       setDisableButtons(true)
+      setRecording(true)
       mediaRecorder.start();
   
       let audioChunks = [];
@@ -24,6 +25,8 @@ function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, fileto
         var newFileReader = new FileReader();
         newFileReader.readAsArrayBuffer(audioBlob)
         filetoBase64(newFileReader)
+        setDisableButtons(false)
+        setRecording(false)
       });
   
       setTimeout(() => {
@@ -61,15 +64,16 @@ function RecordingStatus({Recording}) {
     }
 }
 
-function UploadFile({DisableButtons, setDisableButtons, setFile, filetoBase64}) {
-  setDisableButtons(true)
+function UploadFile({DisableButtons, setDisableButtons, setFile, filetoBase64, setAudioURL}) {
 
   function selectFile(event) {
+    setDisableButtons(true)
     let chosenFile = event.target.files[0]
     setFile(chosenFile)
 
     var fileReader = new FileReader();
     fileReader.readAsArrayBuffer(chosenFile);
+    setAudioURL(new Audio(URL.createObjectURL(event.target.files[0])))
     filetoBase64(fileReader)
   }
 
@@ -78,7 +82,9 @@ function UploadFile({DisableButtons, setDisableButtons, setFile, filetoBase64}) 
       <input disabled type="file" name="file" id="file" />
     )
   } else {
-    <input onChange={selectFile}  type="file" name="file" id="file" />
+    return (
+      <input onChange={selectFile}  type="file" name="file" id="file" />
+    )
   }
 }
 
@@ -137,6 +143,7 @@ function App() {
   const [DisableButtons, setDisableButtons] = useState(false)
   const [AudioURL, setAudioURL] = useState(false)
   const [File, setFile] = useState("")
+  const [Recording, setRecording] = useState(false)
 
   const [SongName, setSongName] = useState(false)
   const [Data, setData] = useState([])
@@ -165,10 +172,8 @@ function App() {
           base64 = btoa(
             sbuint8.reduce((data, byte) => data + String.fromCharCode(byte))
           );
-
           const datatoSend = {"base64": base64}
-      await axios.post("http://localhost:3000/base64file", datatoSend).then(function(response) {
-        console.log(response.data.Data.items)
+      await axios.post("http://localhost:8000/base64file", datatoSend).then(function(response) {
         if (response.data.Err) {
           setErr(`Error: ${response.data.Err}`)
 
@@ -202,14 +207,15 @@ function App() {
     <div>
       <section>
       <header>
+      <h1>{Err}</h1>
         <SongTitle SongName={SongName} />
-        <label for="file">Please select an audio file to search with</label>
+        <label htmlFor="file">Please select an audio file to search with</label>
         <br />
-        <UploadFile DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setFile={setFile} filetoBase64={filetoBase64} />
+        <UploadFile setAudioURL={setAudioURL} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setFile={setFile} filetoBase64={filetoBase64} />
         <br />
 
-        <RecordingButton DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setAudioURL={setAudioURL} filetoBase64={filetoBase64}  />
-        <RecordingStatus />
+        <RecordingButton setRecording={setRecording} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setAudioURL={setAudioURL} filetoBase64={filetoBase64}  />
+        <RecordingStatus Recording={Recording} />
 
         <br />
         <br />
