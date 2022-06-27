@@ -92,6 +92,7 @@
             const datatoSend = {"base64": base64}
         await axios.post("http://localhost:3000/base64file", datatoSend).then(function(response) {
           console.log(response)
+          console.log(response.data.Data.items)
         })
 
          //   axios
