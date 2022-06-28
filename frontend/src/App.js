@@ -254,6 +254,7 @@ function App() {
   } else {
     function handleClick() {
       setStarted(true)
+      document.getElementById('body-start').setAttribute('id', 'body');
     }
 
     return (
