@@ -265,18 +265,15 @@ function App() {
     }
 
     return (
-      <div>
-        <h1 id="logo">WAZAM
-    </h1>
-    <center><p>Find shows and <br /> movies with your <br /> favourite songs
-    </p></center>
-    <button> 
+      <section>
+        <h1 id="logo">WAZAM</h1>
         <center>
-        <a onClick={handleClick}> Get Started 
-        </a>
+          <p>
+            Find shows and <br /> movies with your <br /> favourite songs
+          </p>
+          <button onClick={handleClick}>Get Started</button>
         </center>
-    </button>
-      </div>
+      </section>
     )
   }
 }
