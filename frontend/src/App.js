@@ -40,15 +40,17 @@ function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, fileto
 
   if (DisableButtons) {
     return (
-      <div>
-        <button disabled id="audio-button">Record</button>
-      </div>
+        <button disabled id="audio-button"> 
+            <i id="fa-microphone" class="fa-solid fa-microphone">
+            </i> Record
+        </button>
     )
   } else {
     return (
-      <div>
-        <button onClick={startRecording} id="audio-button">Record</button>
-      </div>
+        <button id="audio-button" onClick={startRecording}> 
+            <i id="fa-microphone" class="fa-solid fa-microphone">
+            </i> Record
+        </button>
     )
   }
 }
@@ -57,11 +59,11 @@ function RecordingStatus({Recording}) {
 
     if (Recording) {
       return (
-        <h5 id="audio-status">Current status: Recording</h5>
+        <h5 id="audio-status">Status: Recording</h5>
       )
     } else {
       return (
-        <h5 id="audio-status">Current status: not recording</h5>
+        <h5 id="audio-status">Status: Not recording</h5>
       )
     }
 }
@@ -100,11 +102,17 @@ function PlayAudioButton({DisableButtons, AudioURL}) {
 
   if (DisableButtons) {
     return (
-      <button disabled id="play-audio">Click here to play audio if recorded</button>
+      <button disabled id="play-audio">
+              <i class="fa-solid fa-play">
+              </i> Play Audio
+      </button>
     )
   } else {
     return (
-      <button onClick={handleClick} id="play-audio">Click here to play audio if recorded</button>
+      <button onClick={handleClick} id="play-audio">
+              <i class="fa-solid fa-play">
+              </i> Play Audio
+      </button>
     )
   }
 }
@@ -113,11 +121,11 @@ function PlayAudioButton({DisableButtons, AudioURL}) {
 function SongTitle({SongName}) {
   if (SongName) {
     return (
-      <h1 id="audio-result">{"Found song: " + SongName}</h1>
+      <center><h1 id="song-name">{"Found song: " + SongName}</h1></center>
     )
   } else {
     return (
-      <h1 id="audio-result">Please upload audio file</h1>
+      <center></center>
     )
   }
 }
@@ -142,7 +150,7 @@ function ResponseData({Data}) {
 }
 
 
-function App() {
+function MainHandler() {
 
   const [DisableButtons, setDisableButtons] = useState(false)
   const [AudioURL, setAudioURL] = useState(false)
@@ -208,27 +216,62 @@ function App() {
   }
 
   return (
-    <div>
-      <section>
-      <header>
-      <h1>{Err}</h1>
-        <SongTitle SongName={SongName} />
-        <label htmlFor="file">Please select an audio file to search with</label>
-        <br />
-        <UploadFile setErr={setErr} setSongName={setSongName} setAudioURL={setAudioURL} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setFile={setFile} filetoBase64={filetoBase64} />
-        <br />
-
-        <RecordingButton setErr={setErr} setSongName={setSongName} setRecording={setRecording} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setAudioURL={setAudioURL} filetoBase64={filetoBase64}  />
-        <RecordingStatus Recording={Recording} />
-
-        <br />
-        <br />
-        <PlayAudioButton AudioURL={AudioURL} DisableButtons={DisableButtons}  />
-      </header>
-    </section>
-    <section id="r"><ResponseData Data={Data} /></section>
+    <section>
+  <header>
+    <center><h1 id="logo">WAZAM
+    </h1></center>
+    <center><h1 id="song-name">{Err}</h1></center>
+    <SongTitle SongName={SongName} />
+    <div id="container">
+    <RecordingButton setErr={setErr} setSongName={setSongName} setRecording={setRecording} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setAudioURL={setAudioURL} filetoBase64={filetoBase64}  />
+    <RecordingStatus Recording={Recording} />
+      <div id="container2">
+      <PlayAudioButton AudioURL={AudioURL} DisableButtons={DisableButtons}  />
+        <label for="file">
+          <div id="audio-result">
+            <i class="fa-solid fa-arrow-up-from-bracket">
+            </i> Upload
+          </div>
+          <UploadFile setErr={setErr} setSongName={setSongName} setAudioURL={setAudioURL} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setFile={setFile} filetoBase64={filetoBase64} />
+        </label>
+      </div>
     </div>
-  );
+    <center>
+    <ResponseData Data={Data} />
+    </center>
+  </header>
+</section>
+)
 }
+
+function App() {
+  const [Started, setStarted] = useState(false)
+
+  if (Started) {
+    return (
+      <MainHandler />
+    )
+  } else {
+    function handleClick() {
+      setStarted(true)
+    }
+
+    return (
+      <div>
+        <h1 id="logo">WAZAM
+    </h1>
+    <center><p>Find shows and <br /> movies with your <br /> favourite songs
+    </p></center>
+    <button> 
+        <center>
+        <a onClick={handleClick}> Get Started 
+        </a>
+        </center>
+    </button>
+      </div>
+    )
+  }
+}
+
 
 export default App;
