@@ -13,6 +13,11 @@ function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, fileto
       setSongName("")
       setErr("")
       mediaRecorder.start();
+
+      let audioButton = document.getElementById("audio-button")
+      let faMic = document.getElementById("fa-microphone")
+      audioButton.style.animationPlayState = "running"
+      faMic.style.animationPlayState = "running"
   
       let audioChunks = [];
       mediaRecorder.addEventListener("dataavailable", event => {
