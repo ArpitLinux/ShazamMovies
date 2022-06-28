@@ -49,14 +49,14 @@ function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, fileto
   if (DisableButtons) {
     return (
         <button disabled id="audio-button"> 
-            <i id="fa-microphone" class="fa-solid fa-microphone">
+            <i id="fa-microphone" className="fa-solid fa-microphone">
             </i> Record
         </button>
     )
   } else {
     return (
         <button id="audio-button" onClick={startRecording}> 
-            <i id="fa-microphone" class="fa-solid fa-microphone">
+            <i id="fa-microphone" className="fa-solid fa-microphone">
             </i> Record
         </button>
     )
@@ -111,14 +111,14 @@ function PlayAudioButton({DisableButtons, AudioURL}) {
   if (DisableButtons) {
     return (
       <button disabled id="play-audio">
-              <i class="fa-solid fa-play">
+              <i className="fa-solid fa-play">
               </i> Play Audio
       </button>
     )
   } else {
     return (
       <button onClick={handleClick} id="play-audio">
-              <i class="fa-solid fa-play">
+              <i className="fa-solid fa-play">
               </i> Play Audio
       </button>
     )
@@ -234,9 +234,9 @@ function MainHandler() {
     <RecordingStatus Recording={Recording} />
       <div id="container2">
       <PlayAudioButton AudioURL={AudioURL} DisableButtons={DisableButtons}  />
-        <label for="file">
+        <label htmlFor="file">
           <div id="audio-result">
-            <i class="fa-solid fa-arrow-up-from-bracket">
+            <i className="fa-solid fa-arrow-up-from-bracket">
             </i> Upload
           </div>
           <UploadFile setErr={setErr} setSongName={setSongName} setAudioURL={setAudioURL} DisableButtons={DisableButtons} setDisableButtons={setDisableButtons} setFile={setFile} filetoBase64={filetoBase64} />
