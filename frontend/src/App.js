@@ -34,6 +34,9 @@ function RecordingButton({DisableButtons, setDisableButtons, setAudioURL, fileto
         filetoBase64(newFileReader)
         setDisableButtons(false)
         setRecording(false)
+
+        audioButton.style.animationDirection="reverse"
+        faMic.style.animationDirection="reverse"
       });
   
       setTimeout(() => {
