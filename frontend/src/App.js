@@ -139,9 +139,8 @@ function ResponseData({Data}) {
             <a href={item.link}>
             <b>{item.pagemap.metatags[0].title}</b>
             <img src={item.pagemap.cse_image[0].src} width="100px" />
-            <p>{item.htmlSnippet}</p>
             <br/>
-          </a>
+            </a>
           )
         })}
       </div>
