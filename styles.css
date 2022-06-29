@@ -41,12 +41,34 @@ body {
 }
 
 #logo {
-    padding: 0px;
+    /*padding: 0px;
     margin: 0px;
     color: var(--red);
     border-width: 1px;
     letter-spacing: 0.01em;
-    font-size: 8.5em;
+    font-size: 8.5em;*/
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 1em;
+    max-width: 30%;
+    height: auto;
+    z-index: 0;
+}
+
+#wand {
+    height: 0.8em;
+    transform: rotate(-120deg);
+    z-index: -1;
+    position: relative;
+    box-shadow: 0em 0.5em 0.6em rgb(26, 26, 26);
+    top: 112px;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 p {
@@ -60,6 +82,7 @@ p {
     -moz-background-clip: text;
     -webkit-text-fill-color: transparent;
     -moz-text-fill-color: transparent;
+    z-index: -2;
 }
 
 button {
@@ -169,7 +192,7 @@ a {
     border-radius: 0.3em;
 }
 
-#container {
+#container1 {
     display: flex;
     flex-direction: column;
     align-items: center;
