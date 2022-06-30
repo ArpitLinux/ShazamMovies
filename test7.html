@@ -67,11 +67,11 @@
       var sr = 44100; // sample rate
       var sl = 4; // 4 seconds
       file.value = null;
-      specifiedVar.onload = (event) => {
+      specifiedVar.onload = async (event) => {
         var audioContext = new AudioContext({ sampleRate: sr });
         var audioBuffer = audioContext.decodeAudioData(
           event.target.result,
-          (buffer) => {
+          async (buffer) => {
             var sbf32 = new ArrayBuffer(buffer.length * 4);
             var sbi16 = new ArrayBuffer(sr * 2 * sl);
             var sbfloat32 = new Float32Array(sbf32);
@@ -89,7 +89,11 @@
             );
             options.data = base64;
 
-        axios.post("http://localhost:3000/base64file", {"base64": base64})
+            const datatoSend = {"base64": base64}
+        await axios.post("http://localhost:3000/base64file", datatoSend).then(function(response) {
+          console.log(response)
+          console.log(response.data.Data.items)
+        })
 
          //   axios
          //   .request(options)
