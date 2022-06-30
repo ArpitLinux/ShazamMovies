@@ -16,6 +16,8 @@
         <a href="/LP.html">
           <img src="/images/logo.png" alt="WAZAM" id="logo">
         </a>
+        <center><h1 id="song-name">Error</h1></center>
+        <center><h1 id="song-name">Song Name is doge</h1></center>
         <div id="container1">
           <button id="audio-button" onclick="recording()"> 
             <i id="fa-microphone" class="fa-solid fa-microphone">
@@ -200,8 +202,10 @@
         let faMic = document.getElementById("fa-microphone")
         audioButton.style.animationPlayState = "running"
         faMic.style.animationPlayState = "running"
-      } /*triggers onclick and runs css animation for recording
+      } 
+      /*triggers onclick and runs css animation for recording
          I can't figure out how to make it run only after allowing mic*/
+
     </script>
   </body>
 </html>
